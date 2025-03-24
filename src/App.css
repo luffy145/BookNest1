@@ -1,0 +1,91 @@
+#booknest
+{
+  color: white;
+  float: inline-start;
+}
+
+.contact-container {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+.contact-title {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.contact-description {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+.contact-details {
+  text-align: center;
+  line-height: 1.8;
+}
+
+.contact-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+/* Contact.css */
+
+.contact-container {
+    font-family: 'Arial, sans-serif';
+    margin: 20px auto;
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-title {
+    text-align: center;
+    color: #333333;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .contact-description {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555555;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  .contact-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  
+  .contact-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .icon {
+    font-size: 24px;
+    color: #007BFF;
+  }
+  
+  .email-icon::before { content: '\\2709'; } /* Envelope icon */\n.phone-icon::before { content: '\\260E'; } /* Phone icon */\n.address-icon::before { content: '\\1F3E0'; } /* Home icon */\n.hours-icon::before { content: '\\23F0'; } /* Clock icon */
+  
