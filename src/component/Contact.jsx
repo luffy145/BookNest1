@@ -1,5 +1,6 @@
 import React from 'react'
 import MainHeading from './MainHeading'
+import '../css/contact.css';
 
 export default function Contact() {
   return (
@@ -13,7 +14,7 @@ export default function Contact() {
       <div className="contact-details">
         <div className="contact-detail-item">
           <i className="icon email-icon"></i>
-          <p><strong>Email:</strong> contact@yourwebsite.com</p>
+          <p><strong>Email:</strong> booknest4@gmail.com</p>
         </div>
         <div className="contact-detail-item">
           <i className="icon phone-icon"></i>
