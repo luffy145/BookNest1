@@ -490,4 +490,3 @@ const buyNow = (book) => {
 
 export default Shop;
 
-"Hello every one ! THankyou for ur support"
