@@ -117,27 +117,44 @@ const Shop = () => {
     setShowModal(false);
     document.body.style.overflow = 'auto';
   };
+  
+  // Cancel purchase
+const cancelPurchase = (bookId) => {
+  const updatedPurchasedBooks = purchasedBooks.filter((book) => book.id !== bookId);
+  setPurchasedBooks(updatedPurchasedBooks);
+  alert(`Purchase of "${selectedBook.title}" has been canceled.`);
+};
 
-  // Add to cart
-  const addToCart = (book) => {
-    const existingItem = cart.find((item) => item.id === book.id);
-    if (existingItem) {
-      setCart(
-        cart.map((item) =>
-          item.id === book.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCart([...cart, { ...book, quantity: 1 }]);
-    }
+
+// Add to cart
+const addToCart = (book) => {
+  const existingItem = cart.find((item) => item.id === book.id);
+  
+  // If the book already exists in the cart, increase its quantity
+  if (existingItem) {
+    setCart(
+      cart.map((item) =>
+        item.id === book.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+  } else {
+    // Add new book to the cart with quantity 1
+    setCart([...cart, { ...book, quantity: 1 }]);
+  }
+
+  // ✅ Show notification only if not in Purchased Books view
+  if (!showPurchasedBooks) {
     const notification = document.getElementById('cart-notification');
-    notification.classList.add('show');
-    setTimeout(() => {
-      notification.classList.remove('show');
-    }, 2000);
-  };
+    if (notification) {
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+  }
+};  
 
   // Remove from cart
   const removeFromCart = (id) => {
@@ -149,16 +166,29 @@ const Shop = () => {
     setIsCartVisible(!isCartVisible);
   };
 
-  // Buy now
-  const buyNow = (book) => {
-    setPurchasedBooks([...purchasedBooks, book]); // Add book to purchased books
-    alert(`"${book.title}" has been purchased successfully!`);
-  };
+// Show custom notification
+const showNotification = (message, type = 'success') => {
+  const notification = document.createElement('div');
+  notification.className = `custom-notification ${type}`;
+  notification.textContent = message;
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.remove();
+  }, 3000); // Hide after 3 seconds
+};
+
+const buyNow = (book) => {
+  setPurchasedBooks([...purchasedBooks, book]);
+  showNotification(`"${book.title}" has been purchased successfully!`);
+};
+
 
   // Toggle purchased books view
   const togglePurchasedBooks = () => {
     setShowPurchasedBooks(!showPurchasedBooks);
-  };
+  };  
 
   if (loading) {
     return (
@@ -215,88 +245,97 @@ const Shop = () => {
           </button>
           {/* Cart Icon */}
           <div className="cart-icon" onClick={toggleCartVisibility}>
-            <span className="cart-count">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+            <span className="cart-count">{cart.length}
+            </span>
             <i>🛒</i>
           </div>
         </div>
 
         {/* Display Purchased Books */}
-        {showPurchasedBooks && (
-          <div className="purchased-books-list">
-            <h3>Purchased Books</h3>
-            {purchasedBooks.length === 0 ? (
-              <p>No books purchased yet.</p>
-            ) : (
-              <div className="book-grid">
-                {purchasedBooks.map((book) => (
-                  <div key={book.id} className="book-card" onClick={() => openModal(book)}>
-                    <div className="book-cover">
-                      <img
-                        src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
-                        alt={`Cover of ${book.title}`}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/default-book-cover.jpg';
-                        }}
-                      />
-                    </div>
-                    <div className="book-info">
-                      <h3 className="book-title">{book.title}</h3>
-                      <p className="book-author">by {book.author}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+{showPurchasedBooks && (
+  <div className="purchased-books-list">
+    <h3>Purchased Books</h3>
+    {purchasedBooks.length === 0 ? (
+      <p>No books purchased yet.</p>
+    ) : (
+      <div className="book-grid">
+        {purchasedBooks.map((book) => (
+          <div key={book.id} className="book-card" onClick={() => openModal(book)}>
+            <div className="book-cover">
+              <img
+                src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
+                alt={`Cover of ${book.title}`}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/default-book-cover.jpg';
+                }}
+              />
+            </div>
+            <div className="book-info">
+              <h3 className="book-title">{book.title}</h3>
+              <p className="book-author">by {book.author}</p>
+            </div>
           </div>
-        )}
+        ))}
+      </div>
+    )}
+    {/* Add Back Button Here */}
+    <button className="back-btn" onClick={() => setShowPurchasedBooks(false)}>
+      Back
+    </button>
+  </div>
+)}
 
-        {/* Display Cart Items */}
-        {isCartVisible && (
-          <div className="cart-items">
-            <h3>Your Cart</h3>
-            {cart.length === 0 ? (
-              <p>Your cart is empty.</p>
-            ) : (
-              <ul>
-                {cart.map((item) => (
-                  <li key={item.id}>
-                    <div className="cart-item">
-                      <img
-                        src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
-                        alt={`Cover of ${item.title}`}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/default-book-cover.jpg';
-                        }}
-                        className="cart-item-image"
-                      />
-                      <div className="cart-item-details">
-                        <h4>{item.title}</h4>
-                        <p>Quantity: {item.quantity}</p>
-                        <p>Price: ${item.price}</p>
-                        <div className="cart-item-actions">
-                          <button
-                            className="view-details-btn"
-                            onClick={() => openModal(item)}
-                          >
-                            View Details
-                          </button>
-                          <button
-                            className="remove-from-cart-btn"
-                            onClick={() => removeFromCart(item.id)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+
+{isCartVisible && (
+  <div className="cart-items">
+    <h3>Your Cart</h3>
+    {cart.length === 0 ? (
+      <p>Your cart is empty.</p>
+    ) : (
+      <ul>
+        {cart.map((item) => (
+          <li key={item.id}>
+            <div className="cart-item">
+              <img
+                src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
+                alt={`Cover of ${item.title}`}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/default-book-cover.jpg';
+                }}
+                className="cart-item-image"
+              />
+              <div className="cart-item-details">
+                <h4>{item.title}</h4>
+                <p>Quantity: {item.quantity}</p>
+                <p>Price: ${item.price}</p>
+                <div className="cart-item-actions">
+                  <button
+                    className="view-details-btn"
+                    onClick={() => openModal(item)}
+                  >
+                    View Details
+                  </button>
+                  <button
+                    className="remove-from-cart-btn"
+                    onClick={() => removeFromCart(item.id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+    {/* Back Button to Close Cart */}
+    <button className="back-btn" onClick={() => setIsCartVisible(false)}>
+      Back
+    </button>
+  </div>
+)}
 
         {/* Main Book Grid */}
         {!showPurchasedBooks && (
@@ -382,55 +421,63 @@ const Shop = () => {
           </>
         )}
 
-        {/* Book Details Modal */}
-        {showModal && selectedBook && (
-          <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-modal" onClick={closeModal}>
-                &times;
-              </button>
-              <div className="modal-book-details">
-                <div className="modal-book-cover">
-                  <img
-                    src={`https://covers.openlibrary.org/b/id/${selectedBook.coverId}-L.jpg`}
-                    alt={`Cover of ${selectedBook.title}`}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-book-cover.jpg';
-                    }}
-                  />
-                </div>
-                <div className="modal-book-info">
-                  <h2>{selectedBook.title}</h2>
-                  <h3>by {selectedBook.author}</h3>
-                  <div className="book-meta">
-                    <span className="book-year">Published: {selectedBook.publicationYear}</span>
-                    <span className="book-pages">Pages: {selectedBook.pages}</span>
-                    <span className="book-rating">Rating: ⭐ {selectedBook.rating}</span>
-                  </div>
-                  <div className="book-price-large">${selectedBook.price}</div>
-                  <p className="book-description">{selectedBook.description}</p>
-                  <div className="book-actions">
-                    <button
-                      className="add-to-cart-btn"
-                      onClick={() => addToCart(selectedBook)}
-                    >
-                      Add to Cart
-                    </button>
-                    <button
-                      className="buy-now-btn"
-                      onClick={() => buyNow(selectedBook)}
-                    >
-                      Buy Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            
+{/* Book Details Modal */}
+{showModal && selectedBook && (
+  <div className="modal-overlay" onClick={closeModal}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <button className="close-modal" onClick={closeModal}>
+        &times;
+      </button>
+      <div className="modal-book-details">
+        <div className="modal-book-cover">
+          <img
+            src={`https://covers.openlibrary.org/b/id/${selectedBook.coverId}-L.jpg`}
+            alt={`Cover of ${selectedBook.title}`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = '/default-book-cover.jpg';
+            }}
+          />
+        </div>
+        <div className="modal-book-info">
+          <h2>{selectedBook.title}</h2>
+          <h3>by {selectedBook.author}</h3>
+          <div className="book-meta">
+            <span className="book-year">Published: {selectedBook.publicationYear}</span>
+            <span className="book-pages">Pages: {selectedBook.pages}</span>
+            <span className="book-rating">Rating: ⭐ {selectedBook.rating}</span>
           </div>
-        )}
+          <div className="book-price-large">${selectedBook.price}</div>
+          <p className="book-description">{selectedBook.description}</p>
+          <div className="book-actions">
+            <button
+              className="add-to-cart-btn"
+              onClick={() => addToCart(selectedBook)}
+            >
+              Add to Cart
+            </button>
+            <button
+              className="buy-now-btn"
+              onClick={() => buyNow(selectedBook)}
+            >
+              Buy Now
+            </button>
+            {/* Show Cancel Purchase button if the book is already purchased */}
+            {purchasedBooks.some((book) => book.id === selectedBook.id) && (
+              <button
+                className="cancel-purchase-btn"
+                onClick={() => cancelPurchase(selectedBook.id)}
+              >
+                Cancel Purchase
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
         {/* Cart notification */}
         <div id="cart-notification" className="cart-notification">

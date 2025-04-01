@@ -1,3 +1,5 @@
+/* about.css (Black Theme) */
+
 * {
     margin: 0;
     padding: 0;
@@ -7,14 +9,13 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #121212; /* Darker background */
+    color: #e0e0e0; /* Light text */
 }
 
 header {
-    background-color: #000000;
+    background-color: #1e1e1e; /* Darker header */
     padding: 1rem;
-    /* margin-top: 0px; */
 }
 
 header nav ul {
@@ -28,12 +29,13 @@ header nav ul li {
 }
 
 header nav ul li a {
-    color: #fff;
+    color: #bdbdbd; /* Lighter text for links */
     text-decoration: none;
     font-size: 1.1rem;
 }
 
-header nav ul li:hover {
+header nav ul li a:hover {
+    color: #fff; /* White on hover */
     font-weight: bold;
 }
 
@@ -41,29 +43,42 @@ main {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: #1e1e1e; /* Darker main background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .about-section {
-    background-color: #fff;
+    background-color: #252525; /* Slightly lighter main section */
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .about-section h1 {
     font-size: 2.5rem;
-    color: #333;
+    color: #ffd700; /* Gold heading */
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+.about-section h1:hover {
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700;
+    color: #fff;
 }
 
 .about-section h2 {
     font-size: 1.8rem;
     margin-top: 1.5rem;
-    color: #444;
+    color: #ffd700; /* Gold subheading */
 }
 
 .about-section p {
     font-size: 1.1rem;
     margin-top: 0.8rem;
+    color: #bdbdbd; /* Lighter paragraph text */
 }
 
 .about-section ul {
@@ -72,10 +87,19 @@ main {
     padding-left: 20px;
 }
 
+.about-section li {
+    font-size: 1.1rem;
+    color: #bdbdbd; /* Lighter list text */
+}
+
 footer {
     text-align: center;
     padding: 1rem;
-    background-color: #333;
-    color: #fff;
+    background-color: #333; /* Darker footer */
+    color: #bdbdbd; /* Lighter footer text */
     margin-top: 2rem;
+}
+
+footer p {
+    font-size: 1em;
 }

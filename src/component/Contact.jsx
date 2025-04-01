@@ -1,5 +1,6 @@
 import React from 'react'
 import MainHeading from './MainHeading'
+import "../css/contact.css"
 
 export default function Contact() {
   return (
