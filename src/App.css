@@ -41,12 +41,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  .background-image {
-    /* ... other properties ... */
-    background: url("A:\workshop 2024\varma\public\librery.jpg") center/cover no-repeat;
-  }
+  background: url("A:\workshop 2024\varma\public\librery.jpg") center/cover no-repeat;
   z-index: 0;
+  opacity: 0.18;
 }
+
 
 /* Header Styles */
 .header {
